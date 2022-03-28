@@ -1,4 +1,5 @@
 ﻿using System;
+using Desafio.Umbler.Application;
 using Desafio.Umbler.Infrastructure.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -41,7 +42,7 @@ namespace Desafio.Umbler.Api
                         .EnableDetailedErrors()
                 );
 
-
+            services.AddScoped<IDomainHostApplication, DomainHostApplication>();
             services.AddControllersWithViews();
         }
 

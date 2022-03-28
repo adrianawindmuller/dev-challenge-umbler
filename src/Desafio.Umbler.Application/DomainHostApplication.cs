@@ -1,27 +1,22 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Whois.NET;
-using Microsoft.EntityFrameworkCore;
-using DnsClient;
-using Desafio.Umbler.Infrastructure.Data;
+﻿using Desafio.Umbler.Application.Common;
 using Desafio.Umbler.Domain;
+using Desafio.Umbler.Infrastructure.Data;
+using DnsClient;
+using Microsoft.EntityFrameworkCore;
+using Whois.NET;
 
-namespace Desafio.Umbler.Api.Controllers
+namespace Desafio.Umbler.Application
 {
-    [Route("api")]
-    public class DomainController : Controller
+    public class DomainHostApplication : IDomainHostApplication
     {
         private readonly DatabaseContext _db;
 
-        public DomainController(DatabaseContext db)
+        public DomainHostApplication(DatabaseContext db)
         {
             _db = db;
         }
 
-        [HttpGet, Route("domain/{domainName}")]
-        public async Task<IActionResult> Get(string domainName)
+        public async Task<Result> FindDomainHostByNameAsync(string domainName)
         {
             // 1. identifica se já existe um dominio com este nome no banco
             var domain = await _db.DomainHost.FirstOrDefaultAsync(d => d.Name == domainName);
@@ -57,23 +52,23 @@ namespace Desafio.Umbler.Api.Controllers
                 _db.DomainHost.Add(domain);
             }
 
-            //  consulta se a data de atualização é maior que o Ttl, se não vai atualizar o registro no banco
+            // 3. consulta se a data de atualização é maior que o Ttl, se não vai atualizar o registro no banco
             if (DateTime.Now.Subtract(domain.UpdatedAt).TotalMinutes > domain.Ttl)
             {
-                // consulta os dados de contato e DNS
+                // 3.1 consulta os dados de contato e DNS
                 var response = await WhoisClient.QueryAsync(domainName);
 
-                // consulta os DNs
+                // 3.2 consulta os DNs
                 var lookup = new LookupClient();
                 var result = await lookup.QueryAsync(domainName, QueryType.ANY);
                 var record = result.Answers.ARecords().FirstOrDefault();
                 var address = record?.Address;
                 var ip = address?.ToString();
 
-                // consulta novamente os dados de contato e DNS via IP
+                // 3.3 consulta novamente os dados de contato e DNS via IP
                 var hostResponse = await WhoisClient.QueryAsync(ip);
-                
-                // atualiza os dados de Domain
+
+                // 3.4 atualiza os dados de Domain
                 domain.Name = domainName;
                 domain.Ip = ip;
                 domain.UpdatedAt = DateTime.Now;
@@ -83,8 +78,7 @@ namespace Desafio.Umbler.Api.Controllers
             }
 
             await _db.SaveChangesAsync();
-
-            return Ok(domain);
+            return Result.Ok(domain);
         }
     }
 }
