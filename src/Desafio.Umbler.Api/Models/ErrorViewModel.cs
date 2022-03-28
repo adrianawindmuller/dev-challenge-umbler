@@ -1,6 +1,6 @@
 using System;
 
-namespace Desafio.Umbler.Models
+namespace Desafio.Umbler.Api.Models
 {
     public class ErrorViewModel
     {

@@ -2,12 +2,13 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Desafio.Umbler.Models;
 using Whois.NET;
 using Microsoft.EntityFrameworkCore;
 using DnsClient;
+using Desafio.Umbler.Infrastructure.Data;
+using Desafio.Umbler.Domain;
 
-namespace Desafio.Umbler.Controllers
+namespace Desafio.Umbler.Api.Controllers
 {
     [Route("api")]
     public class DomainController : Controller
@@ -23,7 +24,7 @@ namespace Desafio.Umbler.Controllers
         public async Task<IActionResult> Get(string domainName)
         {
             // 1. identifica se já existe um dominio com este nome no banco
-            var domain = await _db.Domains.FirstOrDefaultAsync(d => d.Name == domainName);
+            var domain = await _db.DomainHost.FirstOrDefaultAsync(d => d.Name == domainName);
 
             // 2. se o dominio não existe vi criar um novo registro no banco
             if (domain == null)
@@ -42,7 +43,7 @@ namespace Desafio.Umbler.Controllers
                 var hostResponse = await WhoisClient.QueryAsync(ip);
 
                 // 2.4 monta a novo objeto de Domain
-                domain = new Domain
+                domain = new DomainHost
                 {
                     Name = domainName,
                     Ip = ip,
@@ -53,7 +54,7 @@ namespace Desafio.Umbler.Controllers
                 };
 
                 // 2.5 add no bd o domain
-                _db.Domains.Add(domain);
+                _db.DomainHost.Add(domain);
             }
 
             //  consulta se a data de atualização é maior que o Ttl, se não vai atualizar o registro no banco

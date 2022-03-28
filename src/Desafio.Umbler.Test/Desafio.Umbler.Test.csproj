@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -15,7 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Desafio.Umbler\Desafio.Umbler.csproj" />
+    <ProjectReference Include="..\Desafio.Umbler.Api\Desafio.Umbler.Api.csproj" />
+    <ProjectReference Include="..\Desafio.Umbler.Domain\Desafio.Umbler.Domain.csproj" />
   </ItemGroup>
 
 </Project>

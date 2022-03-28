@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Desafio.Umbler.Domain\Desafio.Umbler.Domain.csproj" />
+    <ProjectReference Include="..\Desafio.Umbler.Infrastructure.Data\Desafio.Umbler.Infrastructure.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+  	<PackageReference Include="DnsClient" Version="1.6.0" />
+  	<PackageReference Include="WhoisClient.NET" Version="3.0.1" />
+  </ItemGroup>
+</Project>

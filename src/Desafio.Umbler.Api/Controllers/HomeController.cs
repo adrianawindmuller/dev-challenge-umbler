@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Desafio.Umbler.Models;
+using Desafio.Umbler.Api.Models;
 
-namespace Desafio.Umbler.Controllers
+namespace Desafio.Umbler.Api.Controllers
 {
     public class HomeController : Controller
     {

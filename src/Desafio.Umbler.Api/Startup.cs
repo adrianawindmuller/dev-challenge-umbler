@@ -1,5 +1,5 @@
 ﻿using System;
-using Desafio.Umbler.Models;
+using Desafio.Umbler.Infrastructure.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Desafio.Umbler
+namespace Desafio.Umbler.Api
 {
     public class Startup
     {

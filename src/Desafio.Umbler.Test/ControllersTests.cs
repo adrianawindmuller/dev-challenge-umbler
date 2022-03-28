@@ -1,5 +1,7 @@
-using Desafio.Umbler.Controllers;
-using Desafio.Umbler.Models;
+using Desafio.Umbler.Api.Controllers;
+using Desafio.Umbler.Api.Models;
+using Desafio.Umbler.Domain;
+using Desafio.Umbler.Infrastructure.Data;
 using DnsClient;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -54,12 +56,12 @@ namespace Desafio.Umbler.Test
                 .UseInMemoryDatabase(databaseName: "Find_searches_url")
                 .Options;
 
-            var domain = new Domain { Id = 1, Ip = "192.168.0.1", Name = "test.com", UpdatedAt = DateTime.Now, HostedAt = "umbler.corp", Ttl = 60, WhoIs = "Ns.umbler.com" };
+            var domain = new DomainHost { Id = 1, Ip = "192.168.0.1", Name = "test.com", UpdatedAt = DateTime.Now, HostedAt = "umbler.corp", Ttl = 60, WhoIs = "Ns.umbler.com" };
 
             // Insert seed data into the database using one instance of the context
             using (var db = new DatabaseContext(options))
             {
-                db.Domains.Add(domain);
+                db.DomainHost.Add(domain);
                 db.SaveChanges();
             }
 
@@ -71,7 +73,7 @@ namespace Desafio.Umbler.Test
                 //act
                 var response = controller.Get("test.com");
                 var result = response.Result as OkObjectResult;
-                var obj = result.Value as Domain;
+                var obj = result.Value as DomainHost;
                 Assert.AreEqual(obj.Id, domain.Id);
                 Assert.AreEqual(obj.Ip, domain.Ip);
                 Assert.AreEqual(obj.Name, domain.Name);
@@ -94,7 +96,7 @@ namespace Desafio.Umbler.Test
                 //act
                 var response = controller.Get("test.com");
                 var result = response.Result as OkObjectResult;
-                var obj = result.Value as Domain;
+                var obj = result.Value as DomainHost;
                 Assert.IsNotNull(obj);
             }
         }
@@ -123,7 +125,7 @@ namespace Desafio.Umbler.Test
                 //act
                 var response = controller.Get("test.com");
                 var result = response.Result as OkObjectResult;
-                var obj = result.Value as Domain;
+                var obj = result.Value as DomainHost;
                 Assert.IsNotNull(obj);
             }
         }

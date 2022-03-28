@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 
-namespace Desafio.Umbler
+namespace Desafio.Umbler.Api
 {
     public class Program
     {
