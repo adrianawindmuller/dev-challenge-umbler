@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Desafio.Umbler.Application;
+using System.ComponentModel.DataAnnotations;
 
 namespace Desafio.Umbler.Api.Controllers
 {
@@ -14,7 +15,7 @@ namespace Desafio.Umbler.Api.Controllers
             _domainHostApplication = domainHostApplication;
         }
 
-        [HttpGet, Route("domain/{domainName}")]
+        [HttpGet, Route("domain/{domainName:required:maxlength(100)}")]
         public async Task<IActionResult> GetDomainHostByNameAsync(string domainName)
         {
             var response = await _domainHostApplication.FindDomainHostByNameAsync(domainName);

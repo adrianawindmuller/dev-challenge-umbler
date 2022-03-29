@@ -27,11 +27,11 @@
 
         //404 Not Found - Client error
         //The server can not find the requested resource.
-        public static Result NotFound(string message) => new Result(ResultType.NotFound, message);
+        public static Result NotFound(string message = "") => new Result(ResultType.NotFound, message);
 
         //400 Bad Request - Client error
         //The server cannot or will not process the request due to something that is perceived to be a client error.
-        public static Result BadRequest() => new Result(ResultType.BadRequest);
+        public static Result BadRequest(string message = "") => new Result(ResultType.BadRequest, message);
 
         //204 No Content - Sucess
         //There is no content to send for this request.

@@ -10,7 +10,7 @@ namespace Desafio.Umbler.Api.Controllers
         {
             if (result.ResponseType == ResultType.BadRequest)
             {
-                return BadRequest();
+                return BadRequest(result.Message);
             }
             else if (result.ResponseType == ResultType.Created)
             {
@@ -22,7 +22,7 @@ namespace Desafio.Umbler.Api.Controllers
             }
             else if (result.ResponseType == ResultType.NotFound)
             {
-                return NotFound();
+                return NotFound(result.Message);
             }
             else if (result.ResponseType == ResultType.Ok)
             {
