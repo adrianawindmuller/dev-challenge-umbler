@@ -49,6 +49,7 @@ namespace Desafio.Umbler.Api
                         .EnableDetailedErrors()
                 );
 
+            services.AddSwaggerGen();
             services.AddScoped<IDomainHostApplication, DomainHostApplication>();
             services.AddControllersWithViews();
         }
@@ -60,10 +61,13 @@ namespace Desafio.Umbler.Api
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
             {
-                app.UseExceptionHandler("/Home/Error");
-            }
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+                c.RoutePrefix = string.Empty;
+            });
 
             app.UseStaticFiles();
             app.UseCors("CorsDefault");

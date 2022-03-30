@@ -1,5 +1,4 @@
 using Desafio.Umbler.Api.Controllers;
-using Desafio.Umbler.Api.Models;
 using Desafio.Umbler.Domain;
 using Desafio.Umbler.Infrastructure.Data;
 using DnsClient;
@@ -16,37 +15,37 @@ namespace Desafio.Umbler.Test
     [TestClass]
     public class ControllersTest
     {
-        [TestMethod]
-        public void Home_Index_returns_View()
-        {
-            //arrange 
-            var controller = new HomeController();
+        //[TestMethod]
+        //public void Home_Index_returns_View()
+        //{
+        //    //arrange 
+        //    var controller = new HomeController();
 
-            //act
-            var response = controller.Index();
-            var result = response as ViewResult;
+        //    //act
+        //    var response = controller.Index();
+        //    var result = response as ViewResult;
 
-            //assert
-            Assert.IsNotNull(result);
-        }
+        //    //assert
+        //    Assert.IsNotNull(result);
+        //}
 
-        [TestMethod]
-        public void Home_Error_returns_View_With_Model()
-        {
-            //arrange 
-            var controller = new HomeController();
-            controller.ControllerContext = new ControllerContext();
-            controller.ControllerContext.HttpContext = new DefaultHttpContext();
+        //[TestMethod]
+        //public void Home_Error_returns_View_With_Model()
+        //{
+        //    //arrange 
+        //    var controller = new HomeController();
+        //    controller.ControllerContext = new ControllerContext();
+        //    controller.ControllerContext.HttpContext = new DefaultHttpContext();
 
-            //act
-            var response = controller.Error();
-            var result = response as ViewResult;
-            var model = result.Model as ErrorViewModel;
+        //    //act
+        //    var response = controller.Error();
+        //    var result = response as ViewResult;
+        //    var model = result.Model as ErrorViewModel;
 
-            //assert
-            Assert.IsNotNull(result);
-            Assert.IsNotNull(model);
-        }
+        //    //assert
+        //    Assert.IsNotNull(result);
+        //    Assert.IsNotNull(model);
+        //}
         
         //[TestMethod]
         //public void Domain_In_Database()
