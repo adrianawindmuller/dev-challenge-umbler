@@ -8,11 +8,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Desafio.Umbler.Api", "src\D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Desafio.Umbler.Test", "src\Desafio.Umbler.Test\Desafio.Umbler.Test.csproj", "{B5212D4A-EC08-4FAF-9BF3-856B2EF7C467}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Desafio.Umbler.Domain", "src\Desafio.Umbler.Domain\Desafio.Umbler.Domain.csproj", "{D557168A-A632-40F2-87AF-E9B6711E8FAB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Desafio.Umbler.Domain", "src\Desafio.Umbler.Domain\Desafio.Umbler.Domain.csproj", "{D557168A-A632-40F2-87AF-E9B6711E8FAB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Desafio.Umbler.Application", "src\Desafio.Umbler.Application\Desafio.Umbler.Application.csproj", "{D326DC9E-C03B-42C7-A163-FDA7967DC143}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Desafio.Umbler.Application", "src\Desafio.Umbler.Application\Desafio.Umbler.Application.csproj", "{D326DC9E-C03B-42C7-A163-FDA7967DC143}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Desafio.Umbler.Infrastructure.Data", "src\Desafio.Umbler.Infrastructure.Data\Desafio.Umbler.Infrastructure.Data.csproj", "{B640CE8C-1E0F-40E2-9B22-8CED37626087}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Desafio.Umbler.Infrastructure.Data", "src\Desafio.Umbler.Infrastructure.Data\Desafio.Umbler.Infrastructure.Data.csproj", "{B640CE8C-1E0F-40E2-9B22-8CED37626087}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Desafio.Umbler.Spa", "src\Desafio.Umbler.Spa\Desafio.Umbler.Spa.csproj", "{EAA60B4E-D199-4672-B7A5-3D228E9450F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -84,6 +86,18 @@ Global
 		{B640CE8C-1E0F-40E2-9B22-8CED37626087}.Release|x64.Build.0 = Release|Any CPU
 		{B640CE8C-1E0F-40E2-9B22-8CED37626087}.Release|x86.ActiveCfg = Release|Any CPU
 		{B640CE8C-1E0F-40E2-9B22-8CED37626087}.Release|x86.Build.0 = Release|Any CPU
+		{EAA60B4E-D199-4672-B7A5-3D228E9450F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAA60B4E-D199-4672-B7A5-3D228E9450F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAA60B4E-D199-4672-B7A5-3D228E9450F8}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{EAA60B4E-D199-4672-B7A5-3D228E9450F8}.Debug|x64.Build.0 = Debug|Any CPU
+		{EAA60B4E-D199-4672-B7A5-3D228E9450F8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EAA60B4E-D199-4672-B7A5-3D228E9450F8}.Debug|x86.Build.0 = Debug|Any CPU
+		{EAA60B4E-D199-4672-B7A5-3D228E9450F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAA60B4E-D199-4672-B7A5-3D228E9450F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAA60B4E-D199-4672-B7A5-3D228E9450F8}.Release|x64.ActiveCfg = Release|Any CPU
+		{EAA60B4E-D199-4672-B7A5-3D228E9450F8}.Release|x64.Build.0 = Release|Any CPU
+		{EAA60B4E-D199-4672-B7A5-3D228E9450F8}.Release|x86.ActiveCfg = Release|Any CPU
+		{EAA60B4E-D199-4672-B7A5-3D228E9450F8}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

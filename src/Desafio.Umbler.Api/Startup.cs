@@ -23,8 +23,15 @@ namespace Desafio.Umbler.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-                var connectionString = Configuration.GetConnectionString("DefaultConnection");
+                services.AddCors(c =>
+                {
+                    c.AddPolicy("CorsDefault", p =>
+                        p.AllowAnyOrigin()
+                         .AllowAnyHeader()
+                         .AllowAnyMethod());
+                });
 
+                var connectionString = Configuration.GetConnectionString("DefaultConnection");
                 // Replace with your server version and type.
                 // Use 'MariaDbServerVersion' for MariaDB.
                 // Alternatively, use 'ServerVersion.AutoDetect(connectionString)'.
@@ -59,6 +66,7 @@ namespace Desafio.Umbler.Api
             }
 
             app.UseStaticFiles();
+            app.UseCors("CorsDefault");
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>

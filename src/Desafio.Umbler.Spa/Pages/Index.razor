@@ -1,0 +1,41 @@
+﻿@page "/"
+
+<PageTitle>Desafio Umbler</PageTitle>
+		
+<div class="row align-center-itens">
+  <div class="col-sm-10">
+      <EditForm Model="@DomainHostName" OnValidSubmit="@HandleValidSubmit">
+          <DataAnnotationsValidator />
+
+          <div class="form-group">
+                <div class="input-group">
+                  <input @bind-value="DomainHostName.Name" type="text" maxlength="100" class="form-control form-control-lg" placeholder="Digite o Domínio que deseja pesquisar" />
+                  <span class="input-group-btn">
+                    <button class="btn btn-primary" type="submit">
+                        Pesquisar 
+                        <span class="icon icon-search icon-white mr-1"></span>
+                    </button>
+                  </span>
+                </div>
+                <ValidationMessage For="() => DomainHostName.Name"/>
+          </div>
+            @if (DomainHost is not null && !IsLoading)
+            {
+                <ul class="list-group">
+                  <li class="list-group-item">
+                      <b>Name:</b> @DomainHost.Name
+                  </li>
+                  <li class="list-group-item">
+                      <b>IP:</b> @DomainHost.IP
+                  </li>
+                  <li class="list-group-item">
+                      <b>WhoIs:</b> @DomainHost.WhoIs
+                  </li>
+                  <li class="list-group-item">
+                      <b>HostedAt:</b> @DomainHost.HostedAt
+                  </li>
+                </ul>
+            }
+        </EditForm>
+    </div>
+</div>
