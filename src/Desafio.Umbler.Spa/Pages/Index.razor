@@ -18,8 +18,12 @@
                   </span>
                 </div>
                 <ValidationMessage For="() => DomainHostName.Name"/>
+                @if (MessageInvalidURL.Length > 0)
+                {
+                    <p>@MessageInvalidURL</p>
+                }
           </div>
-            @if (DomainHost is not null && !IsLoading)
+            @if (!IsLoading && DomainHost is not null)
             {
                 <ul class="list-group">
                   <li class="list-group-item">
