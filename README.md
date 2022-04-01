@@ -1,96 +1,53 @@
-
 # Desafio Umbler
 
 Esta é uma aplicação web que recebe um domínio e mostra suas informações de DNS.
 
-Este é um exemplo real de sistema que utilizamos na Umbler.
+# Modificações Realizadas:
 
-Ex: Consultar os dados de registro do dominio `umbler.com`
+## 📌 **BackEnd**
 
-**Retorno:**
-- Name servers (ns254.umbler.com)
-- IP do registro A (177.55.66.99)
-- Empresa que está hospedado (Umbler)
+- Criado uma arquitetura em camadas para separar as responsabilidades.
 
-Essas informações são descobertas através de consultas nos servidores DNS e de WHOIS.
+- Alterado o nome Domain para DomainHost pois havia conflito de namespace com o projeto Domain.
 
-*Obs: WHOIS (pronuncia-se "ruís") é um protocolo específico para consultar informações de contato e DNS de domínios na internet.*
+- Criando o mapeamento para a DomainHost, utilizando Code First e Fluent API.
 
-Nesta aplicação, os dados obtidos são salvos em um banco de dados, evitando uma segunda consulta desnecessaria, caso seu TTL ainda não tenha expirado.
+- Movido a lógica do código da DomainHostController para a Application, deixando mais limpa e diminuindo as responsabilidades da API.
 
-*Obs: O TTL é um valor em um registro DNS que determina o número de segundos antes que alterações subsequentes no registro sejam efetuadas. Ou seja, usamos este valor para determinar quando uma informação está velha e deve ser renovada.*
+- Para comunicar a API com a Applicatiom foi criado uma interface, fazendo que uma não dependa da outra diretamente.
 
-Tecnologias Backend utilizadas:
+- Criado a BaseController para tratar o response de cada chamada HTTP com seu receptivo ResultType, data, ou mensagem.
 
-- C#
-- Asp.Net Core
-- MySQL
-- Entity Framework
+- Refatoração da Application, criando métodos para código duplicado e testando possíveis retornos que evitam erros.
 
-Tecnologias Frontend utilizadas:
+- Refatoração do Domínio, encapsulando e validando as propriedades, deixando o domínio mais rico.
 
-- Webpack
-- Babel
-- ES7
+- Adicionado o Swagger UI na API, o que nos auxilia no consumo e visualização da API REST.
 
-Para rodar o projeto você vai precisar instalar:
+- Desacoplado o LookupClient e o WhoisClient da Application, tornando o código mais fácil de manter e testar.
 
-- dotnet Core SDK (https://www.microsoft.com/net/download/windows dotnet Core 6.0.201 SDK)
-- Um editor de código, acoselhamos o Visual Studio ou VisualStudio Code. (https://code.visualstudio.com/)
-- NodeJs v17.6.0 para "buildar" o FrontEnd (https://nodejs.org/en/)
-- Um banco de dados MySQL (vc pode rodar localmente ou criar um site PHP gratuitamente no app da Umbler https://app.umbler.com/ que lhe oferece o banco Mysql adicionamente)
+- Criando método Application que extrai do Whois os ServerNames com Regex.
 
-Com as ferramentas devidamente instaladas, basta executar os seguintes comandos:
+- Habilitei os analizadores de código default, para poder melhor a qualidade do código.
 
-Para "buildar" o javascript basta executar:
+## 📌 **FrontEnd**
 
-`npm install`
-`npm run build`
+- Criado o projeto SPA para o FrontEnd utilizando o Framework Blazor.
 
-Para Rodar o projeto:
+- Utilizado DataAnnotations para validar Input;
 
-Execute a migration no banco mysql:
+- Criado spinner para loading inicial.
 
-`dotnet tool update --global dotnet-ef`
-`dotnet tool ef database update`
+- Adicionado validação no DomainName utilizando Regex, impedindo que um nome de domínio sem extensão seja enviado para a API.
 
-E após: 
+- Responsivo para mobile
 
-`dotnet run` (ou clique em "play" no editor do vscode)
+## 📌 **Teste**
 
-# Objetivos:
+- Criado teste unitários para o DominaHost.
 
-Se você rodar o projeto e testar um domínio, verá que ele já está funcionando. Porém, queremos melhorar varios pontos deste projeto:
+- Refatoração dos testes unitarios da DomainHostController, criando mock dos dados do LookupClient e do WhoisClient.
 
-# FrontEnd
+![Swegger](src/Desafio.Umbler.Spa/wwwroot/img/swagger.png)
 
- - Os dados retornados não estão formatados, e devem ser apresentados de uma forma legível.
- - Não há validação no frontend permitindo que seja submetido uma requsição inválida para o servidor (por exemplo, um domínio sem extensão).
- - Está sendo utilizado "vanilla-js" para fazer a requisição para o backend, apesar de já estar configurado o webpack. O ideal seria utilizar algum framework mais moderno como ReactJs ou Blazor.  
-
-# BackEnd
-
- - Não há validação no backend permitindo que uma requisição inválida prossiga, o que ocasiona exceptions (erro 500).
- - A complexidade ciclomática do controller está muito alta, o ideal seria utilizar uma arquitetura em camadas.
- - O DomainController está retornando a própria entidade de domínio por JSON, o que faz com que propriedades como Id, Ttl e UpdatedAt sejam mandadas para o cliente web desnecessariamente. Retornar uma ViewModel (DTO) neste caso seria mais aconselhado.
-
-# Testes
-
- - A cobertura de testes unitários está muito baixa, e o DomainController está impossível de ser testado pois não há como "mockar" a infraestrutura.
- - O Banco de dados já está sendo "mockado" graças ao InMemoryDataBase do EntityFramework, mas as consultas ao Whois e Dns não. 
-
-# Dica
-
-- Este teste não tem "pegadinha", é algo pensado para ser simples. Aconselhamos a ler o código, e inclusive algumas dicas textuais deixadas nos testes unitários. 
-- Há um teste unitário que está comentado, que obrigatoriamente tem que passar.
-- Diferencial: criar mais testes.
-
-# Entrega
-
-- Enviei o link do seu repositório com o código atualizado.
-- O repositório deve estar público para que possamos acessar..
-- Modifique Este readme adicionando informações sobre os motivos das mudanças realizadas.
-
-# Modificações:
-
-- DESCREVA AQUI O OBJETIVO DAS MODIFICAÇÕES...
+![Front Returning Data](src/Desafio.Umbler.Spa/wwwroot/img/front-returning-data.png)
