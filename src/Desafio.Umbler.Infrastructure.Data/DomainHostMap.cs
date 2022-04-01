@@ -1,11 +1,6 @@
 ﻿using Desafio.Umbler.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Desafio.Umbler.Infrastructure.Data
 {
@@ -37,7 +32,6 @@ namespace Desafio.Umbler.Infrastructure.Data
             builder.Property(x => x.HostedAt)
                 .IsRequired()
                 .HasColumnType("varchar(200)");
-
         }
     }
 }

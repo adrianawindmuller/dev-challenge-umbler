@@ -8,7 +8,6 @@ namespace Desafio.Umbler.Infrastructure.Data
         public DatabaseContext(DbContextOptions<DatabaseContext> options)
         : base(options)
         {
-
         }
 
         public DbSet<DomainHost> DomainHost { get; set; }
@@ -17,7 +16,7 @@ namespace Desafio.Umbler.Infrastructure.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.ApplyConfiguration(new DomainHostMap());    
+            modelBuilder.ApplyConfiguration(new DomainHostMap());
         }
     }
 }

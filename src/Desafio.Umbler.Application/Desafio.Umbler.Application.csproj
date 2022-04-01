@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
-	  <NoWarn>CA2007, CA1014 </NoWarn>
+    <AnalysisMode>all</AnalysisMode>
+	<NoWarn>CA2007,CA1014,CA2227,CA1002</NoWarn>
   </PropertyGroup>
 	
   <ItemGroup>

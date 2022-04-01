@@ -6,47 +6,47 @@ Esta é uma aplicação web que recebe um domínio e mostra suas informações d
 
 ## 📌 **BackEnd**
 
-- Criado uma arquitetura em camadas para separar as responsabilidades.
+- Criei uma arquitetura em camadas para separar as responsabilidades.
 
-- Alterado o nome Domain para DomainHost pois havia conflito de namespace com o projeto Domain.
+- Alterei o nome da entidade `Domain` para `DomainHost` pois havia conflito de namespace com o projeto `Domain`, e como consequência, tornei o nome da entidade mais explicito.
 
-- Criando o mapeamento para a DomainHost, utilizando Code First e Fluent API.
+- Criei o mapeamento para a `DomainHost`, utilizando Code First e Fluent API.
 
-- Movido a lógica do código da DomainHostController para a Application, deixando mais limpa e diminuindo as responsabilidades da API.
+- Movi a lógica do código da `DomainHostController` para a `Application`, deixando-a mais limpa (2 linhas apenas), e consequentemente, diminuindo as responsabilidades da API.
 
-- Para comunicar a API com a Applicatiom foi criado uma interface, fazendo que uma não dependa da outra diretamente.
+- Para comunicar a `API` com a `Application`, criei uma interface para que a `Controller` não dependa da `Application` diretamente.
 
-- Criado a BaseController para tratar o response de cada chamada HTTP com seu receptivo ResultType, data, ou mensagem.
+- Criei a `BaseController` para tratar o response de cada chamada HTTP com seu respectivo `ResultType`, `Data`, ou `Message`.
 
-- Refatoração da Application, criando métodos para código duplicado e testando possíveis retornos que evitam erros.
+- Refatorei a `Application`, criando métodos para encapsular o código duplicado, e testei possíveis retornos para evitar erros.
 
-- Refatoração do Domínio, encapsulando e validando as propriedades, deixando o domínio mais rico.
+- Refatorei o `Domínio`, encapsulando e validando as propriedades, deixando o domínio mais rico.
 
-- Adicionado o Swagger UI na API, o que nos auxilia no consumo e visualização da API REST.
+- Adicionei o Swagger UI na API, o que nos auxilia no consumo e visualização da API REST.
 
-- Desacoplado o LookupClient e o WhoisClient da Application, tornando o código mais fácil de manter e testar.
+- Desacoplei o `LookupClient` e o `WhoisClient` da `Application`, tornando o código mais fácil de manter e testar.
 
-- Criando método Application que extrai do Whois os ServerNames com Regex.
+- Criei um método que extrai do Whois os ServerNames utilizando `Regex`.
 
-- Habilitei os analizadores de código default, para melhorar a qualidade do código.
+- Habilitei os analizadores de código do `.NET` para melhorar a qualidade do código.
 
 ## 📌 **FrontEnd**
 
-- Criado o projeto SPA para o FrontEnd utilizando o Framework Blazor.
+- Criei o projeto SPA para o FrontEnd utilizando o framework `Blazor`.
 
-- Utilizado DataAnnotations para validar Input;
+- Utilizei `DataAnnotations` para validar o Input.
 
-- Criado spinner para loading inicial.
+- Criei um spinner para o loading inicial.
 
-- Adicionado validação no DomainName utilizando Regex, impedindo que um nome de domínio sem extensão seja enviado para a API.
+- Adicionei validação no DomainName utilizando `Regex`, impedindo que um nome de domínio sem extensão seja enviado para a API.
 
-- Responsivo para mobile
+- Tornei a SPA responsiva para mobile
 
 ## 📌 **Teste**
 
-- Criado teste unitários para o DominaHost.
+- Criei os testes unitários para a entidade `DomainHost`.
 
-- Refatoração dos testes Unitários da DomainHostController, criando mock dos dados do LookupClient e do WhoisClient.
+- Ampliei os testes unitários da `DomainHostController` para testar todos os fluxos possíveis, e para isso, criei um `mock` para ambos `LookupClient` e `WhoisClient`.
 
 **API**
 ![Swegger](src/Desafio.Umbler.Spa/wwwroot/img/swagger.png)

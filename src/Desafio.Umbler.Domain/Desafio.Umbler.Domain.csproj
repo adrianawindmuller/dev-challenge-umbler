@@ -6,9 +6,9 @@
 	<Nullable>disable</Nullable>
   </PropertyGroup>
 
-	<PropertyGroup>
-		<AnalysisMode>AllEnabledByDefault</AnalysisMode>
-		<NoWarn>CA1014 </NoWarn>
-	</PropertyGroup>
+  <PropertyGroup>
+    <AnalysisMode>all</AnalysisMode>
+    <NoWarn>CA1014</NoWarn>
+  </PropertyGroup>
 	
 </Project>

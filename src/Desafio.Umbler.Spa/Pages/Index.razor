@@ -26,10 +26,10 @@
 
           <ValidationMessage For="() => DomainHostName.Name" />
           
-              @if (MessageInvalidURL.Length > 0)
-          {
-              <p class="text-danger">@MessageInvalidURL</p>
-          }
+            @if (MessageInvalidURL.Length > 0)
+            {
+                <p class="text-danger">@MessageInvalidURL</p>
+            }
 
             @if (!IsLoading && DomainHost is not null)
             {
@@ -44,9 +44,9 @@
                       <b>Name Servers:</b>
                       <ul>
                       @foreach (var servername in @DomainHost.ServerNames)
-                     {
-                         <li>@servername</li>
-                     }
+                      {
+                          <li>@servername</li>
+                      }
                       </ul>
                   </li>
                   <li class="list-group-item">

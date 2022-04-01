@@ -5,12 +5,10 @@ using Desafio.Umbler.Domain;
 using Desafio.Umbler.Infrastructure.Data;
 using DnsClient;
 using DnsClient.Protocol;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -43,20 +41,20 @@ namespace Desafio.Umbler.Test
             }
 
             DomainHostViewModel vm;
-            
+
             // Use a clean instance of the context to run the test
             using (var db = new DatabaseContext(options))
             {
                 var nameServer = new List<string>();
-                var lookupClient = MockingLookputClient("umbler.com", "187.84.237.146");
-                var whoisClient = MockingWhoisClient( "Ns.umbler.com", "umbler.corp");
+                var lookupClient = CreateLookputClientMock("umbler.com", "187.84.237.146");
+                var whoisClient = CreateWhoisClientMock("Ns.umbler.com", "umbler.corp");
 
                 var application = new DomainHostApplication(db, lookupClient.Object, whoisClient.Object);
                 var controller = new DomainHostController(application);
 
                 var response = controller.GetDomainHostByNameAsync("umbler.com");
                 var result = response.Result as OkObjectResult;
-                vm = result.Value as DomainHostViewModel;                
+                vm = result.Value as DomainHostViewModel;
             }
 
             // ASSERT
@@ -81,14 +79,14 @@ namespace Desafio.Umbler.Test
                 db.DomainHost.Add(domain);
                 db.SaveChanges();
             }
-            
+
             DomainHostViewModel vm;
 
             // Use a clean instance of the context to run the test
             using (var db = new DatabaseContext(options))
             {
-                var lookupClient = MockingLookputClient("terra.com.br", "208.70.188.57");
-                var whoisClient = MockingWhoisClient("Ns.terra.com.br", "terra.corp");
+                var lookupClient = CreateLookputClientMock("terra.com.br", "208.70.188.57");
+                var whoisClient = CreateWhoisClientMock("Ns.terra.com.br", "terra.corp");
 
                 var application = new DomainHostApplication(db, lookupClient.Object, whoisClient.Object);
                 var controller = new DomainHostController(application);
@@ -115,8 +113,8 @@ namespace Desafio.Umbler.Test
                 .Options;
 
             var db = new DatabaseContext(options);
-            var lookupClient = MockingLookputClient("umbler.com", "187.84.237.146");
-            var whoisClient = MockingWhoisClient("Ns.umbler.com", organizationName: null);
+            var lookupClient = CreateLookputClientMock("umbler.com", "187.84.237.146");
+            var whoisClient = CreateWhoisClientMock("Ns.umbler.com", organizationName: null);
             var application = new DomainHostApplication(db, lookupClient.Object, whoisClient.Object);
             var controller = new DomainHostController(application);
 
@@ -128,7 +126,7 @@ namespace Desafio.Umbler.Test
             Assert.AreEqual(404, result.StatusCode);
         }
 
-        private Mock<ILookupClient> MockingLookputClient(string domainName, string ip)
+        private Mock<ILookupClient> CreateLookputClientMock(string domainName, string ip)
         {
             var aRecord = new ARecord(new ResourceRecordInfo
                 (domainName, ResourceRecordType.A, QueryClass.IN, 0, 0), IPAddress.Parse(ip));
@@ -145,7 +143,7 @@ namespace Desafio.Umbler.Test
             return lookupMock;
         }
 
-        private Mock<IWhoisClient> MockingWhoisClient(string raw, string organizationName)
+        private Mock<IWhoisClient> CreateWhoisClientMock(string raw, string organizationName)
         {
             var whoisClient = new Mock<IWhoisClient>();
             whoisClient.Setup(l => l.QueryAsync(
@@ -157,7 +155,7 @@ namespace Desafio.Umbler.Test
                 It.IsAny<int>(),
                 It.IsAny<CancellationToken>())
             ).Returns(Task.FromResult(new WhoisResponse { Raw = raw, OrganizationName = organizationName }));
-            
+
             return whoisClient;
         }
     }

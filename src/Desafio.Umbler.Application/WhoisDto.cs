@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Desafio.Umbler.Application
+﻿namespace Desafio.Umbler.Application
 {
     public class WhoisDto
     {
-        public WhoisDto(string iP, string raw, int ttl, string organizationName)
+        public WhoisDto(string ip, string raw, int ttl, string organizationName)
         {
-            IP = iP;
+            IP = ip;
             Raw = raw;
             Ttl = ttl;
             OrganizationName = organizationName;
@@ -28,7 +22,7 @@ namespace Desafio.Umbler.Application
 
         public string Raw { get; }
 
-        public int Ttl { get;}
+        public int Ttl { get; }
 
         public string OrganizationName { get; }
 

@@ -1,7 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using Desafio.Umbler.Application;
 using Microsoft.AspNetCore.Mvc;
-using Desafio.Umbler.Application;
-using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 
 namespace Desafio.Umbler.Api.Controllers
 {

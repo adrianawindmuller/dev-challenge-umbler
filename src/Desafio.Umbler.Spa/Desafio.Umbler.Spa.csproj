@@ -2,14 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-	  <ImplicitUsings>enable</ImplicitUsings>
-	  <Nullable>disable</Nullable>
+	<ImplicitUsings>enable</ImplicitUsings>
+	<Nullable>disable</Nullable>
   </PropertyGroup>
 
-   <PropertyGroup>
-    	<AnalysisMode>AllEnabledByDefault</AnalysisMode>
-    	<NoWarn>CA1014, CA1062 </NoWarn>
-   </PropertyGroup>
+  <PropertyGroup>
+    <AnalysisMode>recommended</AnalysisMode>
+  </PropertyGroup>
 	
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.3" />

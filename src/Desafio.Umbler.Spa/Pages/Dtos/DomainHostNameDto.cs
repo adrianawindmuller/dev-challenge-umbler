@@ -7,6 +7,6 @@ namespace Desafio.Umbler.Spa.Pages.Dtos
 
         [Required]
         [MaxLength(100)]
-        public string Name { get; set; } = default!;
+        public string Name { get; set; }
     }
 }

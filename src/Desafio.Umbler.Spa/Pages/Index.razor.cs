@@ -21,7 +21,7 @@ namespace Desafio.Umbler.Spa.Pages
         protected override void OnInitialized()
         {
             IsLoading = true;
-            MessageInvalidURL = "";
+            MessageInvalidURL = string.Empty;
         }
 
         private async Task HandleValidSubmit()
@@ -29,29 +29,31 @@ namespace Desafio.Umbler.Spa.Pages
             // clear the properties
             IsLoading = true;
             DomainHost = null;
-            MessageInvalidURL = "";
+            MessageInvalidURL = string.Empty;
 
-            // validates if domainName is valid
-            // if url address is a valid it goes to the api, if not i issue an error message
+            // validates if the domainName is valid
+            // if url address is valid, it goes to the api, if not, issue an error message
             var isURLValid = IsURLValid(DomainHostName.Name);
-            if (isURLValid == true)
+            if (isURLValid)
             {
                 DomainHost = await Http.GetFromJsonAsync<DomainHostViewModel>($"api/domain/{DomainHostName.Name}");
             }
             else
             {
-                MessageInvalidURL = "Digite uma nome de dominio valido";
+                MessageInvalidURL = "Digite um nome de domínio válido";
             }
 
             IsLoading = false;
         }
 
 
-        private bool IsURLValid(string nameDomain)
+        private static bool IsURLValid(string nameDomain)
         {
-            string Pattern = @"^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$";
-            Regex Rgx = new Regex(Pattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
-            return Rgx.IsMatch(nameDomain);
+            var regex = new Regex(
+                @"^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$",
+                RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+            return regex.IsMatch(nameDomain);
         }
     }
 }
