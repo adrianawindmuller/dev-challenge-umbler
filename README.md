@@ -34,7 +34,7 @@ Esta é uma aplicação web que recebe um domínio e mostra suas informações d
 
 - Criei o projeto SPA para o FrontEnd utilizando o framework `Blazor`.
 
-- Utilizei `DataAnnotations` para validar o Input.
+- Utilizei `DataAnnotations` para validar o DomainName, como por exemplo a `RegularExpression` que impede que um nome de domínio sem extensão seja enviado para a API.
 
 - Criei um spinner para o loading inicial.
 

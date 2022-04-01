@@ -26,11 +26,6 @@
 
           <ValidationMessage For="() => DomainHostName.Name" />
           
-            @if (MessageInvalidURL.Length > 0)
-            {
-                <p class="text-danger">@MessageInvalidURL</p>
-            }
-
             @if (!IsLoading && DomainHost is not null)
             {
                 <ul class="list-group">
