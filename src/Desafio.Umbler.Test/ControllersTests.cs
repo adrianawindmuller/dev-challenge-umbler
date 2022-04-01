@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -45,7 +44,6 @@ namespace Desafio.Umbler.Test
             // Use a clean instance of the context to run the test
             using (var db = new DatabaseContext(options))
             {
-                var nameServer = new List<string>();
                 var lookupClient = CreateLookputClientMock("umbler.com", "187.84.237.146");
                 var whoisClient = CreateWhoisClientMock("Ns.umbler.com", "umbler.corp");
 

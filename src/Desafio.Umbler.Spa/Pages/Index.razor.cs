@@ -13,16 +13,10 @@ namespace Desafio.Umbler.Spa.Pages
         [Inject]
         private HttpClient Http { get; set; }
 
-        private bool IsLoading { get; set; }
-
-        protected override void OnInitialized()
-        {
-            IsLoading = true;
-        }
+        private bool IsLoading { get; set; } = true;
 
         private async Task HandleValidSubmit()
         {
-            IsLoading = true;
             DomainHost = null;
 
             DomainHost = await Http.GetFromJsonAsync<DomainHostViewModel>($"api/domain/{DomainHostName.Name}");
