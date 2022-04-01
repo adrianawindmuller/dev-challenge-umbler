@@ -28,7 +28,7 @@ Esta é uma aplicação web que recebe um domínio e mostra suas informações d
 
 - Criando método Application que extrai do Whois os ServerNames com Regex.
 
-- Habilitei os analizadores de código default, para poder melhor a qualidade do código.
+- Habilitei os analizadores de código default, para melhorar a qualidade do código.
 
 ## 📌 **FrontEnd**
 
@@ -46,8 +46,10 @@ Esta é uma aplicação web que recebe um domínio e mostra suas informações d
 
 - Criado teste unitários para o DominaHost.
 
-- Refatoração dos testes unitarios da DomainHostController, criando mock dos dados do LookupClient e do WhoisClient.
+- Refatoração dos testes Unitários da DomainHostController, criando mock dos dados do LookupClient e do WhoisClient.
 
+**API**
 ![Swegger](src/Desafio.Umbler.Spa/wwwroot/img/swagger.png)
 
+**FrontEnd**
 ![Front Returning Data](src/Desafio.Umbler.Spa/wwwroot/img/front-returning-data.png)
