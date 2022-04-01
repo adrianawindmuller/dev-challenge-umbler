@@ -40,7 +40,7 @@ namespace Desafio.Umbler.Domain
             UpdatedAt = DateTime.Now;
         }
 
-        private void Validate(string name, string ip, string whois, string hostedAt)
+        private static void Validate(string name, string ip, string whois, string hostedAt)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("Nome obrigatório!", nameof(name));

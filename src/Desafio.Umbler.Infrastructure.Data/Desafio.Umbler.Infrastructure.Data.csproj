@@ -3,7 +3,12 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+	<Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <PropertyGroup>
+  	<AnalysisMode>AllEnabledByDefault</AnalysisMode>
+  	<NoWarn>CA1014, CA1062 </NoWarn>
   </PropertyGroup>
 	
   <ItemGroup>

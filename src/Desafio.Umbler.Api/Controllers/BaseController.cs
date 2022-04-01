@@ -6,7 +6,7 @@ namespace Desafio.Umbler.Api.Controllers
     public class BaseController : ControllerBase
     {
         [NonAction]
-        protected IActionResult Response(Result result)
+        protected new IActionResult Response(Result result)
         {
             if (result.ResponseType == ResultType.BadRequest)
             {

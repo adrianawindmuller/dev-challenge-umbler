@@ -3,9 +3,14 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+	<Nullable>disable</Nullable>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+	  <NoWarn>CA2007, CA1014 </NoWarn>
+  </PropertyGroup>
+	
   <ItemGroup>
     <ProjectReference Include="..\Desafio.Umbler.Domain\Desafio.Umbler.Domain.csproj" />
     <ProjectReference Include="..\Desafio.Umbler.Infrastructure.Data\Desafio.Umbler.Infrastructure.Data.csproj" />

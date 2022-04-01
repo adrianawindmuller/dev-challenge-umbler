@@ -18,7 +18,7 @@ namespace Desafio.Umbler.Spa.Pages
 
         public string MessageInvalidURL { get; set; }
 
-        protected override async Task OnInitializedAsync()
+        protected override void OnInitialized()
         {
             IsLoading = true;
             MessageInvalidURL = "";
@@ -27,12 +27,12 @@ namespace Desafio.Umbler.Spa.Pages
         private async Task HandleValidSubmit()
         {
             // clear the properties
+            MessageInvalidURL = "";
             IsLoading = true;
             DomainHost = null;
-            MessageInvalidURL = "";
 
             // validates if domainName is valid
-            // if it's a valid url address it goes to the api, if not i issue an error message
+            // if url address is a valid it goes to the api, if not i issue an error message
             var isURLValid = IsURLValid(DomainHostName.Name);
             if (isURLValid == true)
             {
