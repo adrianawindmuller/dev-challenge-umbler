@@ -1,161 +1,164 @@
 using Desafio.Umbler.Api.Controllers;
+using Desafio.Umbler.Application;
+using Desafio.Umbler.Application.Common;
 using Desafio.Umbler.Domain;
 using Desafio.Umbler.Infrastructure.Data;
 using DnsClient;
+using DnsClient.Protocol;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using Whois.NET;
 
 namespace Desafio.Umbler.Test
 {
     [TestClass]
     public class ControllersTest
     {
-        //[TestMethod]
-        //public void Home_Index_returns_View()
-        //{
-        //    //arrange 
-        //    var controller = new HomeController();
+        [TestMethod]
+        public void AddDomainHost_WhenDomainHostDoesntExistsInDatabaseYet_Sucess()
+        {
+            // ARRANGE 
+            var options = new DbContextOptionsBuilder<DatabaseContext>()
+                .UseInMemoryDatabase(databaseName: "Find_searches_url")
+                .Options;
 
-        //    //act
-        //    var response = controller.Index();
-        //    var result = response as ViewResult;
+            var domain = new DomainHost("umbler.com", "187.84.237.146", "Ns.umbler.com", "umbler.corp", 60);
 
-        //    //assert
-        //    Assert.IsNotNull(result);
-        //}
+            // ACT
+            // Insert seed data into the database using one instance of the context
+            using (var db = new DatabaseContext(options))
+            {
+                db.DomainHost.Add(domain);
+                db.SaveChanges();
+            }
 
-        //[TestMethod]
-        //public void Home_Error_returns_View_With_Model()
-        //{
-        //    //arrange 
-        //    var controller = new HomeController();
-        //    controller.ControllerContext = new ControllerContext();
-        //    controller.ControllerContext.HttpContext = new DefaultHttpContext();
+            DomainHostViewModel vm;
+            
+            // Use a clean instance of the context to run the test
+            using (var db = new DatabaseContext(options))
+            {
+                var lookupClient = MockingLookputClient("umbler.com", "187.84.237.146");
+                var whoisClient = MockingWhoisClient("Ns.umbler.com", "umbler.corp");
 
-        //    //act
-        //    var response = controller.Error();
-        //    var result = response as ViewResult;
-        //    var model = result.Model as ErrorViewModel;
+                var application = new DomainHostApplication(db, lookupClient.Object, whoisClient.Object);
+                var controller = new DomainHostController(application);
 
-        //    //assert
-        //    Assert.IsNotNull(result);
-        //    Assert.IsNotNull(model);
-        //}
-        
-        //[TestMethod]
-        //public void Domain_In_Database()
-        //{
-        //    //arrange 
-        //    var options = new DbContextOptionsBuilder<DatabaseContext>()
-        //        .UseInMemoryDatabase(databaseName: "Find_searches_url")
-        //        .Options;
+                var response = controller.GetDomainHostByNameAsync("umbler.com");
+                var result = response.Result as OkObjectResult;
+                vm = result.Value as DomainHostViewModel;                
+            }
 
-        //    var domain = new DomainHost { Id = 1, Ip = "192.168.0.1", Name = "test.com", UpdatedAt = DateTime.Now, HostedAt = "umbler.corp", Ttl = 60, WhoIs = "Ns.umbler.com" };
-
-        //    // Insert seed data into the database using one instance of the context
-        //    using (var db = new DatabaseContext(options))
-        //    {
-        //        db.DomainHost.Add(domain);
-        //        db.SaveChanges();
-        //    }
-
-        //    // Use a clean instance of the context to run the test
-        //    using (var db = new DatabaseContext(options))
-        //    {
-        //        var controller = new DomainController(db);
-
-        //        //act
-        //        var response = controller.GetDomainHostByName("test.com");
-        //        var result = response.Result as OkObjectResult;
-        //        var obj = result.Value as DomainHost;
-        //        Assert.AreEqual(obj.Id, domain.Id);
-        //        Assert.AreEqual(obj.Ip, domain.Ip);
-        //        Assert.AreEqual(obj.Name, domain.Name);
-        //    }
-        //}
-
-        //[TestMethod]
-        //public void Domain_Not_In_Database()
-        //{
-        //    //arrange 
-        //    var options = new DbContextOptionsBuilder<DatabaseContext>()
-        //        .UseInMemoryDatabase(databaseName: "Find_searches_url")
-        //        .Options;
-
-        //    // Use a clean instance of the context to run the test
-        //    using (var db = new DatabaseContext(options))
-        //    {
-        //        var controller = new DomainController(db);
-
-        //        //act
-        //        var response = controller.GetDomainHostByName("test.com");
-        //        var result = response.Result as OkObjectResult;
-        //        var obj = result.Value as DomainHost;
-        //        Assert.IsNotNull(obj);
-        //    }
-        //}
-
-        //[TestMethod]
-        //public void Domain_Moking_LookupClient()
-        //{
-        //    //arrange 
-        //    var lookupClient = new Mock<ILookupClient>();
-        //    var domainName = "test.com";
-
-        //    var dnsResponse = new Mock<IDnsQueryResponse>();
-        //    lookupClient.Setup(l => l.QueryAsync(domainName, QueryType.ANY, QueryClass.IN, System.Threading.CancellationToken.None)).ReturnsAsync(dnsResponse.Object);
-
-        //    //arrange 
-        //    var options = new DbContextOptionsBuilder<DatabaseContext>()
-        //        .UseInMemoryDatabase(databaseName: "Find_searches_url")
-        //        .Options;
-
-        //    // Use a clean instance of the context to run the test
-        //    using (var db = new DatabaseContext(options))
-        //    {
-        //        //inject lookupClient in controller constructor
-        //        var controller = new DomainController(db/*,IWhoisClient, lookupClient*/ );
-
-        //        //act
-        //        var response = controller.GetDomainHostByName("test.com");
-        //        var result = response.Result as OkObjectResult;
-        //        var obj = result.Value as DomainHost;
-        //        Assert.IsNotNull(obj);
-        //    }
-        //}
+            // ASSERT
+            Assert.AreEqual("umbler.com", vm.Name);
+            Assert.AreEqual("187.84.237.146", vm.Ip);
+            Assert.AreEqual("Ns.umbler.com", vm.WhoIs);
+            Assert.AreEqual("umbler.corp", vm.HostedAt);
+        }
 
         [TestMethod]
-        public void Domain_Moking_WhoisClient()
+        public void EditDomainHost_WhenTTLisOutdated_Sucess()
         {
-            //arrange
-            //whois is a static class, we need to create a class to "wrapper" in a mockable version of WhoisClient
-            //var whoisClient = new Mock<IWhoisClient>();
-            //var domainName = "test.com";
+            // ARRANGE 
+            var options = new DbContextOptionsBuilder<DatabaseContext>()
+                .UseInMemoryDatabase(databaseName: "Find_searches_url")
+                .Options;
 
-            //whoisClient.Setup(l => l.QueryAsync(domainName)).Return();
+            // Insert seed data into the database using one instance of the context
+            var domain = new DomainHost("umbler.com", "187.84.237.146", "Ns.umbler.com", "umbler.corp", 0);
+            using (var db = new DatabaseContext(options))
+            {
+                db.DomainHost.Add(domain);
+                db.SaveChanges();
+            }
+            
+            DomainHostViewModel vm;
 
-            ////arrange 
-            //var options = new DbContextOptionsBuilder<DatabaseContext>()
-            //    .UseInMemoryDatabase(databaseName: "Find_searches_url")
-            //    .Options;
+            // Use a clean instance of the context to run the test
+            using (var db = new DatabaseContext(options))
+            {
+                var lookupClient = MockingLookputClient("terra.com.br", "208.70.188.57");
+                var whoisClient = MockingWhoisClient("Ns.terra.com.br", "terra.corp");
 
-            //// Use a clean instance of the context to run the test
-            //using (var db = new DatabaseContext(options))
-            //{
-            //    //inject IWhoisClient in controller's constructor
-            //    var controller = new DomainController(db/*,IWhoisClient, ILookupClient*/);
+                var application = new DomainHostApplication(db, lookupClient.Object, whoisClient.Object);
+                var controller = new DomainHostController(application);
 
-            //    //act
-            //    var response = controller.Get("test.com");
-            //    var result = response.Result as OkObjectResult;
-            //    var obj = result.Value as Domain;
-            //    Assert.IsNotNull(obj);
-            //}
+                // ACT
+                var response = controller.GetDomainHostByNameAsync("terra.com.br");
+                var result = response.Result as OkObjectResult;
+                vm = result.Value as DomainHostViewModel;
+            }
+
+            // ASSERT
+            Assert.AreEqual("terra.com.br", vm.Name);
+            Assert.AreEqual("208.70.188.57", vm.Ip);
+            Assert.AreEqual("Ns.terra.com.br", vm.WhoIs);
+            Assert.AreEqual("terra.corp", vm.HostedAt);
+        }
+
+        [TestMethod]
+        public void TryAddDomainHost_WhenWhoisDomainNameDoesntExists_Fail()
+        {
+            // ARRANGE 
+            var options = new DbContextOptionsBuilder<DatabaseContext>()
+                .UseInMemoryDatabase(databaseName: "Find_searches_url")
+                .Options;
+
+            var db = new DatabaseContext(options);
+            var lookupClient = MockingLookputClient("umbler.com", "187.84.237.146");
+            var whoisClient = MockingWhoisClient("Ns.umbler.com", organizationName: null);
+            var application = new DomainHostApplication(db, lookupClient.Object, whoisClient.Object);
+            var controller = new DomainHostController(application);
+
+            // ACT
+            var response = controller.GetDomainHostByNameAsync("umbler.com");
+            var result = response.Result as NotFoundObjectResult;
+
+            // ASSERT
+            Assert.AreEqual(404, result.StatusCode);
+        }
+
+        private Mock<ILookupClient> MockingLookputClient(string domainName, string ip)
+        {
+            var aRecord = new ARecord(new ResourceRecordInfo
+                (domainName, ResourceRecordType.A, QueryClass.IN, 0, 0), IPAddress.Parse(ip));
+
+            var dnsResponseMock = new Mock<IDnsQueryResponse>();
+            dnsResponseMock
+                .Setup(p => p.Answers)
+                    .Returns(new DnsResourceRecord[] { aRecord });
+
+            var lookupMock = new Mock<ILookupClient>();
+            lookupMock.Setup(f => f.QueryAsync(It.IsAny<string>(), It.IsAny<QueryType>(), It.IsAny<QueryClass>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(dnsResponseMock.Object));
+
+            return lookupMock;
+        }
+
+        private Mock<IWhoisClient> MockingWhoisClient(string raw, string organizationName)
+        {
+            var whoisClient = new Mock<IWhoisClient>();
+
+            whoisClient.Setup(l => l.QueryAsync(
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<int>(),
+                It.IsAny<Encoding>(),
+                It.IsAny<int>(),
+                It.IsAny<int>(),
+                It.IsAny<CancellationToken>())
+            ).Returns(Task.FromResult(new WhoisResponse { Raw = raw, OrganizationName = organizationName }));
+            
+            return whoisClient;
         }
     }
 }

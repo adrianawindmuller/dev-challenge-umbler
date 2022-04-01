@@ -1,6 +1,8 @@
 ﻿using System;
 using Desafio.Umbler.Application;
+using Desafio.Umbler.Application.Common;
 using Desafio.Umbler.Infrastructure.Data;
+using DnsClient;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -51,6 +53,8 @@ namespace Desafio.Umbler.Api
 
             services.AddSwaggerGen();
             services.AddScoped<IDomainHostApplication, DomainHostApplication>();
+            services.AddScoped<IWhoisClient, WhoisClientWrapper>();
+            services.AddScoped<ILookupClient, LookupClient>();
             services.AddControllersWithViews();
         }
 

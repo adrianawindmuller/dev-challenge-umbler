@@ -11,26 +11,28 @@ namespace Desafio.Umbler.Application
     public class DomainHostApplication : IDomainHostApplication
     {
         private readonly DatabaseContext _db;
+        private readonly ILookupClient _lookupClient;
+        private readonly IWhoisClient _whoisClient;
 
-        public DomainHostApplication(DatabaseContext db)
+        public DomainHostApplication(DatabaseContext db, ILookupClient lookupClient, IWhoisClient whoisClient)
         {
             _db = db;
+            _lookupClient = lookupClient;
+            _whoisClient = whoisClient;
         }
 
         public async Task<Result> FindDomainHostByNameAsync(string domainName)
         {
-            // 1. search the Whois data and if not found, returns a NotFound.
+            // search the Whois data
             var response = await WhoIs(domainName);
-            if (response.Sucess == false)
+            if (!response.Sucess)
                 return Result.NotFound($"Error: {response.Raw}");
 
-            // 2. identifies if a DomainHost with this name already exists in the db
             var domainHost = await _db.DomainHost.FirstOrDefaultAsync(d => d.Name == domainName);
 
-            // 3. if the DomainHost does not exist vi create a new record in the database
+            // if the DomainHost does not exist yet, create a new one
             if (domainHost == null)
             {
-                // 3.1 create a new DomainHost object
                 domainHost = new DomainHost(
                     domainName, 
                     response.IP, 
@@ -38,14 +40,12 @@ namespace Desafio.Umbler.Application
                     response.OrganizationName, 
                     response.Ttl);
 
-                // 3.2 added to the database the DomainHost
                 _db.DomainHost.Add(domainHost);
             }
 
-            // 4 if DomainHost already exists, query if update date is greater than Ttl updates data
+            // if DomainHost already exists, query if update date is greater than Ttl updates data
             if (DateTime.Now.Subtract(domainHost.UpdatedAt).TotalMinutes > domainHost.Ttl)
             {
-                // 4.1 update DomainHost data
                 domainHost.EditDomainHost(
                     domainName, 
                     response.IP,
@@ -54,10 +54,8 @@ namespace Desafio.Umbler.Application
                     response.Ttl);
             }
 
-            // 5. save all changes in db
             await _db.SaveChangesAsync();
 
-            // 6. return the DomainHostViewModel with the data
             return Result.Ok(new DomainHostViewModel
             {
                 Name = domainHost.Name,
@@ -69,25 +67,20 @@ namespace Desafio.Umbler.Application
 
         private async Task<WhoisDto> WhoIs(string domainName)
         {
-            // 1. search contact information and DNS address via domainName
-            var response = await WhoisClient.QueryAsync(domainName);
+            // search whois
+            var responseWhois = await _whoisClient.QueryAsync(domainName);
+            if (responseWhois.OrganizationName == null)
+                return (new WhoisDto(responseWhois.Raw));
 
-            // 2. if response is null retorn Sucess = false and Raw with the error information
-            if (response.OrganizationName == null)
-                return (new WhoisDto(response.Raw));
+            // search DNS
+            var responseLookup = await _lookupClient.QueryAsync(domainName, QueryType.ANY);
 
-            // 3. search DNS
-            var lookup = new LookupClient();
-            var result = await lookup.QueryAsync(domainName, QueryType.ANY);
-
-            var record = result.Answers.ARecords().FirstOrDefault();
+            var record = responseLookup.Answers.ARecords().FirstOrDefault();
             var ip = record?.Address?.ToString();
 
-            // 3. search again contact information and DNS address via IP
-            var hostResponse = await WhoisClient.QueryAsync(ip);
+            var hostResponse = await _whoisClient.QueryAsync(ip);
 
-            // 4. return data
-            return new WhoisDto(ip, response.Raw, record?.TimeToLive ?? 0, hostResponse.OrganizationName);
+            return new WhoisDto(ip, responseWhois.Raw, record?.TimeToLive ?? 0, responseWhois.OrganizationName);
         }
     }
 }
