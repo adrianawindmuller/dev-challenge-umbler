@@ -6,7 +6,7 @@
     
         public string IP { get; set; } = default!;
     
-        public string WhoIs { get; set; } = default!;
+        public List<string> ServerNames { get; set; } = new List<string>();
     
         public string HostedAt { get; set; } = default!;
     }

@@ -27,9 +27,9 @@ namespace Desafio.Umbler.Spa.Pages
         private async Task HandleValidSubmit()
         {
             // clear the properties
-            MessageInvalidURL = "";
             IsLoading = true;
             DomainHost = null;
+            MessageInvalidURL = "";
 
             // validates if domainName is valid
             // if url address is a valid it goes to the api, if not i issue an error message
