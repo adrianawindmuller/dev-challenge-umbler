@@ -4,6 +4,7 @@ using Desafio.Umbler.Infrastructure.Data;
 using DnsClient;
 using DnsClient.Protocol;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 using Whois.NET;
 
 namespace Desafio.Umbler.Application
@@ -61,7 +62,7 @@ namespace Desafio.Umbler.Application
                 Name = domainHost.Name,
                 Ip = domainHost.Ip,
                 HostedAt = domainHost.HostedAt,
-                WhoIs = domainHost.WhoIs
+                ServerNames = WhoisRawToServerNames(domainHost.WhoIs)
             });
         }
 
@@ -81,6 +82,27 @@ namespace Desafio.Umbler.Application
             var hostResponse = await _whoisClient.QueryAsync(ip);
 
             return new WhoisDto(ip, responseWhois.Raw, record?.TimeToLive ?? 0, responseWhois.OrganizationName);
+        }
+
+        private static List<string> WhoisRawToServerNames(string raw)
+        {
+            var serverNamesList = new List<string>();
+            var regex = new Regex("nserver:[^\n]+|Name Server:[^\nDNSSEC]+");
+            var serverNames = regex.Matches(raw);
+
+            if (regex.IsMatch(raw))
+            {
+                foreach (var serverName in serverNames)
+                {
+                    serverNamesList.Add(serverName.ToString().Trim());
+                }
+            }
+            else
+            {
+                serverNamesList.Add(raw);
+            }
+
+            return serverNamesList;
         }
     }
 }

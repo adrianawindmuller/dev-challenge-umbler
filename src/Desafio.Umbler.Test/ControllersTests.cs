@@ -47,8 +47,9 @@ namespace Desafio.Umbler.Test
             // Use a clean instance of the context to run the test
             using (var db = new DatabaseContext(options))
             {
+                var nameServer = new List<string>();
                 var lookupClient = MockingLookputClient("umbler.com", "187.84.237.146");
-                var whoisClient = MockingWhoisClient("Ns.umbler.com", "umbler.corp");
+                var whoisClient = MockingWhoisClient( "Ns.umbler.com", "umbler.corp");
 
                 var application = new DomainHostApplication(db, lookupClient.Object, whoisClient.Object);
                 var controller = new DomainHostController(application);
@@ -61,7 +62,7 @@ namespace Desafio.Umbler.Test
             // ASSERT
             Assert.AreEqual("umbler.com", vm.Name);
             Assert.AreEqual("187.84.237.146", vm.Ip);
-            Assert.AreEqual("Ns.umbler.com", vm.WhoIs);
+            Assert.AreEqual("Ns.umbler.com", vm.ServerNames.First());
             Assert.AreEqual("umbler.corp", vm.HostedAt);
         }
 
@@ -101,7 +102,7 @@ namespace Desafio.Umbler.Test
             // ASSERT
             Assert.AreEqual("terra.com.br", vm.Name);
             Assert.AreEqual("208.70.188.57", vm.Ip);
-            Assert.AreEqual("Ns.terra.com.br", vm.WhoIs);
+            Assert.AreEqual("Ns.terra.com.br", vm.ServerNames.First());
             Assert.AreEqual("terra.corp", vm.HostedAt);
         }
 
@@ -147,7 +148,6 @@ namespace Desafio.Umbler.Test
         private Mock<IWhoisClient> MockingWhoisClient(string raw, string organizationName)
         {
             var whoisClient = new Mock<IWhoisClient>();
-
             whoisClient.Setup(l => l.QueryAsync(
                 It.IsAny<string>(),
                 It.IsAny<string>(),
